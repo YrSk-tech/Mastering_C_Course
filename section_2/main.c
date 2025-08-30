@@ -4,12 +4,12 @@
 int main(void)
 {
 	int girls = 12;
-	int boys = 9;
-	int students = girls + boys;
+	int bananas = 9;
+	int students = girls + bananas;
 
 	printf("in the clasroom, there are: \n");
 	printf("\t%d girls \n", girls);
-	printf("\t%d boys \n", boys);
+	printf("\t%d bananas \n", bananas);
 	printf("\ttotal amount of students: %d \n", students);
 
 

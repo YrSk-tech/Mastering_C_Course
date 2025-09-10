@@ -3,24 +3,61 @@
 
 #include "snekobject.h"
 
-snek_object_t *new_snek_vector3(
-    snek_object_t *x, snek_object_t *y, snek_object_t *z
-) {
-  if(x == NULL || y == NULL || z == NULL){
-    return NULL;
-  }
+bool snek_array_set(snek_object_t *snek_obj, size_t index, snek_object_t *value) {
+  if(snek_obj == NULL || value == NULL ){ 
+    return false; 
+    }else if(snek_obj->kind != ARRAY || index >= snek_obj->data.v_array.size){
+    return false; 
+    }
+  snek_obj->data.v_array.elements[index] = value;
+  return true;
+}
+
+snek_object_t *snek_array_get(snek_object_t *snek_obj, size_t index) {
+    if(snek_obj == NULL){ 
+    return NULL; 
+    }else if(snek_obj->kind != ARRAY || index >= snek_obj->data.v_array.size){
+    return NULL; 
+    }
+  return snek_obj->data.v_array.elements[index];
+}
+
+// don't touch below this line
+
+snek_object_t *new_snek_array(size_t size) {
   snek_object_t *obj = malloc(sizeof(snek_object_t));
   if (obj == NULL) {
     return NULL;
   }
-  obj->kind = VECTOR3;
-  obj->data.v_vector3.x = x;
-  obj->data.v_vector3.y = y;
-  obj->data.v_vector3.z = z;
+
+  snek_object_t **elements = calloc(size, sizeof(snek_object_t *));
+  if (elements == NULL) {
+    free(obj);
+    return NULL;
+  }
+
+  obj->kind = ARRAY;
+  obj->data.v_array = (snek_array_t){.size = size, .elements = elements};
   return obj;
 }
 
-// don't touch below this line
+snek_object_t *new_snek_vector3(
+    snek_object_t *x, snek_object_t *y, snek_object_t *z
+) {
+  if (x == NULL || y == NULL || z == NULL) {
+    return NULL;
+  }
+
+  snek_object_t *obj = malloc(sizeof(snek_object_t));
+  if (obj == NULL) {
+    return NULL;
+  }
+
+  obj->kind = VECTOR3;
+  obj->data.v_vector3 = (snek_vector_t){.x = x, .y = y, .z = z};
+
+  return obj;
+}
 
 snek_object_t *new_snek_integer(int value) {
   snek_object_t *obj = malloc(sizeof(snek_object_t));
